@@ -1,1 +1,1 @@
-# Grad_Cam algorithm for image activations
+# Grad_Cam algorithm for image activation visualization
