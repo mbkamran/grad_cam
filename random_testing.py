@@ -11,7 +11,7 @@ with tf.GradientTape() as tape:
     y = x @ w + b
     loss = tf.reduce_mean(y**2)
 
-model = keras.applications.ResNet50(
+model = keras.applications.Xception(
     include_top=True,
     weights="imagenet",
     input_tensor=None,
@@ -20,3 +20,5 @@ model = keras.applications.ResNet50(
     classes=1000,
     classifier_activation="softmax",
 )
+
+model.summary()

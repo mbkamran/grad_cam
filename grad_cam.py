@@ -31,7 +31,6 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
             pred_index = tf.argmax(preds[0])
         class_channel = preds[:, pred_index]
     
-    print(last_conv_layer_output.shape)
     grads = tape.gradient(class_channel, last_conv_layer_output)
 
     pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
@@ -41,6 +40,7 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
     heatmap = tf.squeeze(heatmap)
 
     heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+
     return heatmap.numpy()
 
 def save_and_display_gradcam(img_path, heatmap, cam_path="cam.jpg", alpha=0.4):
@@ -79,10 +79,12 @@ def main():
         classifier_activation="softmax",
     )
 
-    img_path = "./small_cat.jpg"
+    print(model.summary())
+
+    img_path = "./cat_dog.jpg"
     img_size = (224,224)
 
-    last_conv_layer_name = "conv5_block3_3_conv"
+    last_conv_layer_name = "conv5_block3_out"
 
     img_array = preprocess_input(get_img_array(img_path, size=img_size))
 
@@ -95,6 +97,7 @@ def main():
 
     # Display heatmap
     plt.matshow(heatmap)
+    plt.savefig("heatmap.jpg")
     plt.show()
 
     save_and_display_gradcam(img_path, heatmap)
